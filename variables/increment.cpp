@@ -9,8 +9,8 @@ int main()
     int c = ++a;
     int d = b++;
 
-    cout << "Nilai c: " << c << endl;
-    cout << "Nilai d: " << d << endl;
+    cout << "Nilai c: " << c << endl; // 6
+    cout << "Nilai d: " << d << endl; // 5
 
     return 0;
 }
