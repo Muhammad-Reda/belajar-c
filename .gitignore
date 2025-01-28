@@ -4,6 +4,7 @@
 ### C ###
 # Prerequisites
 *.d
+cppProperties.json
 
 # Object files
 *.o
