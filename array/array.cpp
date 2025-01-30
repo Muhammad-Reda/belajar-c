@@ -35,5 +35,14 @@ int main()
 
     std::cout << array_string.size() << std::endl;
 
+    int arr[] = {0, 2, 3, 4, 5};
+    std::cout << "array: " << arr[4] << std::endl;
+
+    int *p;
+    p = arr + 4;
+    *p = 6;
+
+    std::cout << "Pointer arr: " << *p << std::endl;
+
     return 0;
 }

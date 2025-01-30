@@ -27,7 +27,7 @@ int main()
     std::cout << "* p2: " << *p2 << std::endl;
     std::cout << "First value: " << first_value << std::endl;
     std::cout << "Second value: " << second_value << std::endl;
-
+    
     int *p3 = &first_value;
     *p3 = 200;
 
