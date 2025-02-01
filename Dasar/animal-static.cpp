@@ -1,0 +1,1 @@
+static char animal[] = "animal";

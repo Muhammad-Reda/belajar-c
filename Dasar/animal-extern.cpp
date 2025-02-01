@@ -1,0 +1,1 @@
+char animal_extern[] = "Animal extern";
