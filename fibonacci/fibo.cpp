@@ -18,6 +18,7 @@ void fibo(int n)
 int main()
 {
     int n;
+    std::cout << "Fibonacci \n";
     std::cout << "n: ";
     std::cin >> n;
     std::cout << "\n";
