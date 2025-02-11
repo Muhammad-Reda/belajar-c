@@ -1,153 +1,53 @@
+// codewars https://www.codewars.com/kata/55b195a69a6cc409ba000053/train/cpp
+
 #include <iostream>
-#include <string>
+using namespace std;
+
+// Fungsi untuk menghitung kombinasi C(n, k) secara iteratif
+unsigned long long combination(int n, int k)
+{
+    unsigned long long result = 1;
+    // Manfaatkan simetri: C(n, k) == C(n, n-k)
+    if (k > n - k)
+        k = n - k;
+    for (int i = 1; i <= k; i++)
+    {
+        result = result * (n - i + 1) / i;
+    }
+    return result;
+}
 
 int main()
 {
-    int x = 3;
-    int increase = 0, decrease = 0;
-    int same = 0, greater = 0;
-    std::string digitsString;
+    int x;
+    cout << "Masukkan nilai x (untuk 10^x): ";
+    cin >> x;
 
-    for (int i = 0; i < x; i++)
+    // Kasus khusus: untuk x == 0, hanya ada angka 0
+    if (x == 0)
     {
-        digitsString.push_back('9');
+        cout << "Jumlah angka increasing atau decreasing di bawah 10^0 adalah: 1" << endl;
+        return 0;
     }
 
-    int digitsInt = std::stoi(digitsString);
+    unsigned long long total = 0;
 
-    for (int j = 101; j <= 200; j++)
+    // Untuk n = 1 (angka satu digit: 0 sampai 9)
+    total += 10; // angka: 0, 1, 2, ..., 9
+
+    // Untuk n-digit dengan n >= 2
+    for (int n = 2; n <= x; n++)
     {
-        std::string dig = std::to_string(j);
-        std::string prevState = "p";
-        std::string currState = "c";
-        int sameNumber = 0;
-        int sameState = 0;
-        if (dig.size() < 3)
-        {
-            increase += 1;
-            continue;
-        }
-        for (int k = 0; k < dig.size(); k++)
-        {
-            // std::cout << "K: " << k << std::endl;
-            int prev;
+        // Jumlah angka increasing: C(n+8, n)
+        unsigned long long increasing = combination(n + 8, n);
+        // Jumlah angka decreasing: C(n+9, n) - 1 (dikurangi 1 untuk mengecualikan "semua nol")
+        unsigned long long decreasing = combination(n + 9, n) - 1;
+        // Angka repdigit (misalnya: 11, 22, ..., 99) dihitung dua kali, sehingga dikurangkan 9
+        unsigned long long repdigits = 9;
 
-            if (k == 0)
-            {
-                prev = std::stoi(std::string(1, dig.at(k)));
-                // std::cout << "Prev: " << prev << std::endl;
-                continue;
-            }
-            // 332 123 121 111
-
-            int curr = std::stoi(std::string(1, dig.at(k)));
-            // std::cout << "prev: " << prev << std::endl;
-            // std::cout << "cur: " << curr << std::endl;
-            // std::cout << "Prevstate: " << prevState << std::endl;
-            // std::cout << "CurrState: " << currState << std::endl;
-            // std::cout << "samestate: " << sameState << std::endl;
-
-            if (curr > prev)
-            {
-                currState = "increase";
-                // std::cout << "Increase > " << "Current state: " << currState << " prevState: " << prevState << " sameState: " << sameState << std::endl;
-                prev = curr;
-                if (prevState == "p")
-                {
-                    prevState = currState;
-                    currState = "c";
-                    if (currState.compare(prevState) == 0)
-                    {
-                        sameState = 1;
-                    }
-                    // std::cout << "init > " << "Current state: " << currState << " prevState: " << prevState << " sameState: " << sameState << std::endl;
-                }
-
-                else if (k == dig.size() - 1 && sameState)
-                {
-                    // std::cout << "true" << std::endl
-                    //   << std::endl;
-                    greater += 1;
-                    increase += 1;
-                }
-                else if (currState.compare(prevState) == 0)
-                {
-                    sameState = 1;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-
-                if (curr == prev)
-            {
-                // std::cout << "Increase == " << std::endl;
-
-                currState = "increase";
-                sameNumber = 1;
-                if (prevState == "p")
-                {
-                    // std::cout << "Init state" << std::endl;
-                    prevState = currState;
-                    currState = "c";
-                }
-
-                else if (k == dig.size() - 1 && (sameState || sameNumber))
-                {
-                    // std::cout << "true" << std::endl
-                    //   << std::endl;
-                    same += 1;
-                    increase += 1;
-                }
-                else if (currState.compare(prevState))
-                {
-                    sameState = 1;
-                }
-                else
-                {
-                    // std::cout << "Break == " << std::endl;
-                    break;
-                }
-            }
-            else
-
-                if (curr < prev)
-            {
-                // std::cout << "descrease < " << std::endl;
-
-                currState = "decrease";
-                prev = curr;
-                if (prevState == "p")
-                {
-                    // std::cout << "Init state" << std::endl;
-                    prevState = currState;
-                    currState = "c";
-                }
-
-                else if ((k == dig.size() - 1) && (sameState || sameNumber))
-                {
-                    // std::cout << prevState << " " << k << " " << dig.size() - 1 << " samestate: " << sameState << "\n";
-                    decrease += 1;
-                    // std::cout << "true" << std::endl
-                    //           << std::endl;
-                }
-                else if (currState.compare(prevState) == 0)
-                {
-                    sameState = 1;
-                }
-                else
-                {
-                    // std::cout << "Break < " << std::endl;
-                    break;
-                }
-            }
-        }
+        total += (increasing + decreasing - repdigits);
     }
 
-    std::cout << "Increase: " << increase << " Decrease: " << decrease << " Same: " << same << " greater: " << greater << std::endl;
-    std::cout << increase + decrease;
-
+    cout << "Jumlah angka increasing atau decreasing di bawah 10^" << x << " adalah: " << total << endl;
     return 0;
 }
